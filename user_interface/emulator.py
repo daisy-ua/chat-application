@@ -8,7 +8,12 @@ from services.user import User
 from user_interface.print_method import print_info_message
 
 usernames = [
-    'Frank', 'Fiona', 'Lip', 'Ian', 'Debbie', 'Carl', 'Liam'
+    'Frank', 'Fiona', 'Lip', 'Ian', 'Debbie', 'Carl', 'Liam', 'first'
+]
+
+tags = [
+    'ads', 'swag', 'kpop', 'vegan', 'solotravel', 'puppylove', 'vr', 'bts', 'bantansonyendan',
+    'fitfam', 'cardio', 'giveaway', 'weddinghair'
 ]
 
 listener = ChatController.get_message_subscriber()
@@ -17,7 +22,9 @@ listener = ChatController.get_message_subscriber()
 def publish_message(user):
     recipient = random.choice(usernames)
     message = Message(user.username, recipient)
-    message.set_data('{0} -> {1}: {2}'.format(message.sender, message.recipients, message.msg_id))
+    tags_quantity = random.randint(0, len(tags) // 2)
+    msg_tags = '' if tags_quantity == 0 else ','.join(set(random.choice(tags) for _ in range(tags_quantity)))
+    message.set_data('{0} -> {1}: {2}'.format(message.sender, message.recipients, message.msg_id), msg_tags)
     print('User %s sending new message to %s' % (message.sender, message.recipients))
     ChatController.create_message(message)
     ChatController.publish_message(message)
@@ -44,9 +51,9 @@ def load_emulator_scene():
     for username in usernames:
         user = User(username)
         for i in range(1, 2):
-            time.sleep(random.random() * 2)
-            if not random.getrandbits(1):
-                read_message(user)
+            # time.sleep(random.random() * 2)
+            # if not random.getrandbits(1):
+            #     read_message(user)
             publish_message(user)
 
     try:

@@ -1,6 +1,8 @@
 import user_interface.print_method as print_method
 from services.chat_controller import ChatController
 from services.constants import Colors
+from services.neo4j_server import neo4j
+
 
 GET_MESSAGE_QUEUE = 1
 SELECT_MESSAGE = 2
@@ -42,6 +44,8 @@ def process_message(message):
     if ChatController.is_spam(message.content):
         print_method.print_warning_message('Spam detected! Blocking this message?')
         ChatController.block_massage(message)
+        neo4j.set_spam_message(message)
+
         return
 
     print_method.print_info_message('No spam detected! Sending this message...')

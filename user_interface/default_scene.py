@@ -3,18 +3,21 @@ from user_interface.user_scene import show_user_menu
 from user_interface.admin_scene import show_admin_menu
 from user_interface.worker_scene import load_worker_scene
 from user_interface.emulator import load_emulator_scene
+from user_interface.neo4j_scene import load_neo4j_scene
 from user_interface.print_method import print_initial
 
 WORKER = 1
 USER = 2
 EMULATOR = 3
-EXIT = 4
+NEO4J_MODE = 4
+EXIT = 0
 
 menu = [
     '1. worker',
     '2. user',
     '3. emulator',
-    '4. exit'
+    '4. neo4j mode',
+    '0. exit'
 ]
 
 
@@ -33,6 +36,9 @@ def load():
         print_initial(menu)
 
         option = int(input("----> "))
+
+        if option == NEO4J_MODE:
+            load_neo4j_scene()
 
         if option == WORKER:
             load_worker_scene()

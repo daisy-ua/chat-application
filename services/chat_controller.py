@@ -1,7 +1,8 @@
 import time
 import random
 
-from services.server import RedisServer
+from services.redis_server import RedisServer
+from services.neo4j_server import neo4j
 from services.constants import Key, MessageStatus
 from services.message import Message
 
@@ -34,6 +35,7 @@ class ChatController:
         redis.rpush('{0}:{1}'.format(Key.SENT_MESSAGES, message.sender), message.msg_id)
         redis.zincrby(Key.ACTIVE_SENDERS, 1, message.sender)
         redis.rpush('{0}:{1}'.format(Key.INCOMING_MESSAGES, message.recipients), message.msg_id)
+        neo4j.add_massage(message)
 
         message.status = MessageStatus.SENT
         message.save()

@@ -1,7 +1,8 @@
 import time
 
 from services.constants import Key
-from services.server import RedisServer
+from services.redis_server import RedisServer
+from services.neo4j_server import neo4j
 
 
 class User:
@@ -20,6 +21,7 @@ class User:
     def save(self):
         self.redis.hset('{0}:{1}'.format(Key.ALL_USERS, self.username),
                         mapping={'username': self.username, 'admin': str(self.admin)})
+        neo4j.add_user(self.username)
         log_msg = 'User {0} registered at {1}'.format(self.username, time.ctime())
         self.redis.publish(Key.LOG_CHANNEL, log_msg)
 
